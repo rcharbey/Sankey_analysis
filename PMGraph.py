@@ -31,9 +31,7 @@ class PMVertex(object):
                     out_vector.append(pme_out.weight)
                     
         return (in_vector, out_vector)
-                    
-        
-                
+
         
 class PMEdge(object):
     def __init__(self, pmgraph, snapshot, pmvertex_1_id, pmvertex_2_id, weight):
@@ -71,7 +69,6 @@ class PMGraph(object):
         
     @classmethod
     def read(cls, filename):
-        
         _max_snapshot = -1
         _vertex_set_sequence = []
         with open(filename + '_nb_members_per_community.csv', 'r') as to_read:
@@ -95,12 +92,17 @@ class PMGraph(object):
         return cls(_vertex_set_sequence, _edge_set_sequence)
     
     def get_mask_vectors(self):
-        all_masks = {}
-        for pmv in self.all_vertices:
-            all_masks[pmv.id] = pmv.get_mask_vector()
+        return {pmv.id : pmv.get_mask_vector() for pmv in self.all_vertices}
     
-        
-        
+    def get_nb_members(self):
+        return {pmv.id : pmv.nb_members for pmv in self.all_vertices}
+            
+    def get_snapshots(self):
+        return {pmv.id : pmv.snapshots for pmv in self.all_vertices}
+    
+    def get_community(self):
+        return {pmv.id : pmv.community for pmv in self.all_vertices}
+    
 PMGraph.read('../Data/edgescommunities').get_mask_vectors()
         
             
