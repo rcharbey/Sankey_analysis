@@ -6,6 +6,7 @@ Ceci est un script temporaire.
 """
 
 import csv
+from Temporal_community import Temporal_community
 
 class PMVertex(object):
     def __init__(self, pmgraph, id_vertex, community, snapshot, nb_members):
@@ -49,20 +50,24 @@ class PMGraph(object):
         self.all_edges = []
         self.vertex_set_sequence = [{} for x in range(len(vertex_set_sequence))] 
         self.edge_set_sequence = [[] for x in range(len(edge_set_sequence))]
+        self.temporal_communities = {}
         
         nb_vertices = 0
         
         for i in range(len(vertex_set_sequence)):
             for v, nb in vertex_set_sequence[i]:
+                if not v in self.temporal_communities:
+                    self.temporal_communities[v] = Temporal_community(self, v)
                 pmvertex = PMVertex(self, nb_vertices, v, i, nb)
                 self.all_vertices.append(pmvertex)
                 self.vertex_set_sequence[i][v] = pmvertex
+                self.temporal_communities[v].add(pmvertex)
                 nb_vertices += 1
                 
         for i in range(len(edge_set_sequence)):
             for vertex_1, vertex_2, w in edge_set_sequence[i]:
-                pmv_1_id = self.vertex_set_sequence[i][vertex_1]
-                pmv_2_id = self.vertex_set_sequence[i+1][vertex_2]
+                pmv_1_id = self.vertex_set_sequence[i][vertex_1].id
+                pmv_2_id = self.vertex_set_sequence[i+1][vertex_2].id
                 pmedge = PMEdge(self, i, pmv_1_id, pmv_2_id, w)
                 self.all_edges.append(pmedge)
                 self.edge_set_sequence[i].append(pmedge)
@@ -103,7 +108,10 @@ class PMGraph(object):
     def get_community(self):
         return {pmv.id : pmv.community for pmv in self.all_vertices}
     
-PMGraph.read('../Data/edgescommunities').get_mask_vectors()
+pmg = PMGraph.read('../Data/edgescommunities')
+for i in pmg.temporal_communities:
+    tc = pmg.temporal_communities[i]
+    tc.plot_evolution()
         
             
             
