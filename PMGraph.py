@@ -107,11 +107,7 @@ class PMGraph(object):
     
     def get_community(self):
         return {pmv.id : pmv.community for pmv in self.all_vertices}
-    
-pmg = PMGraph.read('../Data/edgescommunities')
-for i in pmg.temporal_communities:
-    tc = pmg.temporal_communities[i]
-    tc.plot_evolution()
+
         
             
             

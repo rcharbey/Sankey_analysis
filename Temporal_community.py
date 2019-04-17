@@ -9,6 +9,7 @@ Created on Tue Apr 16 15:54:09 2019
 from matplotlib.pyplot import savefig, close, plot, legend, xticks
 from numpy import arange
 
+
 class Temporal_community(object):
     def __init__(self, pmgraph, community_id, pmvertices = None):
         self.pmgraph = pmgraph
