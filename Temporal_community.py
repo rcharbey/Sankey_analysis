@@ -9,7 +9,6 @@ Created on Tue Apr 16 15:54:09 2019
 from matplotlib.pyplot import savefig, close, plot, legend, xticks
 from numpy import arange
 
-
 class Temporal_community(object):
     def __init__(self, pmgraph, community_id, pmvertices = None):
         self.pmgraph = pmgraph
@@ -42,11 +41,6 @@ class Temporal_community(object):
             d_in.append(len(vector_in))
             d_out.append(len(vector_out))
             nb_members.append(pmv.nb_members)
-          
-        print('lifetime %s %s' % self.lifetime)
-        print('d_in %s' % (d_in))
-        print('d_out %s' % d_out)
-        print('members %s' % nb_members)
         
         plot(d_in, label = 'd_in')
         plot(d_out, label = 'd_out')
@@ -55,6 +49,20 @@ class Temporal_community(object):
         legend(loc = 'upper right')
         savefig('../Results/Plot_per_community/%s.png' % self.id)
         close()
+        
+    def export_evolution(self):
+            
+        list_sankey_metrics = []
+        for pmv in self.members:
+            vector_in, vector_out = pmv.get_mask_vector()
+            list_sankey_metrics.append([
+                    pmv.community, 
+                    pmv.snapshot,
+                    len(vector_in),
+                    len(vector_out),
+                    pmv.nb_members
+            ])
+        return list_sankey_metrics
         
             
             
